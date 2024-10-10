@@ -6,3 +6,6 @@ const router = Router();
 
 // defining routes
 router.post("/create", createPost);
+
+// export router
+export default router;

@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/error-handler.middleware";
+import postsRouter from "./routes/posts.routes";
 
 // creating an express app
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // defining the routes
+app.use("/posts", postsRouter);
 
 //error handler middleware
 app.use(errorHandler);
