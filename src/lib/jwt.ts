@@ -12,8 +12,8 @@ export const generateAccessToken = async (id: string) => {
 export const verifyToken = <TokenPayload>(token: string, secret: string) => {
   try {
     const payload = jwt.verify(token, secret) as TokenPayload;
-    return payload;
+    return { payload };
   } catch (error) {
-    return error as JsonWebTokenError;
+    return { error: error as JsonWebTokenError };
   }
 };

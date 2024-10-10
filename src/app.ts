@@ -1,6 +1,8 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/error-handler.middleware";
+import authenticate from "./middleware/authenticate.middleware";
+import authRouter from "./routes/auth.routes";
 import postsRouter from "./routes/posts.routes";
 import userRouter from "./routes/user.routes";
 
@@ -13,8 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // defining the routes
+app.use("/auth", authRouter);
 app.use("/user", userRouter);
-app.use("/posts", postsRouter);
+app.use("/posts", authenticate, postsRouter);
 
 //error handler middleware
 app.use(errorHandler);

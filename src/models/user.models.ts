@@ -1,6 +1,6 @@
 import mongoose, { CallbackError, Schema } from "mongoose";
 import { IUser } from "../types/model.types";
-import { hashPassword, verifyPassword } from "../lib/utils";
+import { hashPassword, verifyPassword } from "../lib/argon";
 
 const userSchema = new Schema<IUser>(
   {
