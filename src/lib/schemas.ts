@@ -1,10 +1,21 @@
 import { z } from "zod";
 
-// COMMON SCEMAS START
+// COMMON SCEMAS
 const requiredString = z.string().trim().min(1);
-// COMMON SCHEMAS END
 
-// POSTS SCHEMAS START
+// USERS SCHEMAS
+export const registerUserSchema = z.object({
+  username: requiredString.regex(/^[a-zA-Z0-9_]*$/, {
+    message: "Username can only contain letters, numbers, and underscores.",
+  }),
+  email: requiredString.email(),
+  password: z
+    .string()
+    .min(8, "Password is required")
+    .max(20, "Password cannot exceed 20 characters"),
+});
+
+// POSTS SCHEMAS
 export const createPostSchema = z.object({
   title: requiredString,
   content: requiredString,
@@ -19,5 +30,3 @@ export const updatePostSchema = z.object({
 });
 
 export const getPostSchema = requiredString;
-
-// POSTS SCHEMAS END
