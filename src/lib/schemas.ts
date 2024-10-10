@@ -15,6 +15,11 @@ export const registerUserSchema = z.object({
     .max(20, "Password cannot exceed 20 characters"),
 });
 
+export const loginUserSchema = z.object({
+  email: z.string().trim().email("Invalid email"),
+  password: z.string().min(1, "Password is required"),
+});
+
 // POSTS SCHEMAS
 export const createPostSchema = z.object({
   title: requiredString,

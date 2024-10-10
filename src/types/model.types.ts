@@ -8,6 +8,7 @@ export interface IUser extends Document {
   refreshToken: string;
   createdAt: Date;
   updatedAt: Date;
+  comparePassword: (password: string) => Promise<boolean>;
   getRequiredFields(): Pick<
     IUser,
     "_id" | "username" | "email" | "createdAt" | "updatedAt"

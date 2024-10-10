@@ -1,6 +1,6 @@
 import mongoose, { CallbackError, Schema } from "mongoose";
 import { IUser } from "../types/model.types";
-import { hashPassword } from "../lib/utils";
+import { hashPassword, verifyPassword } from "../lib/utils";
 
 const userSchema = new Schema<IUser>(
   {
@@ -37,6 +37,10 @@ userSchema.pre("save", async function (next) {
     next(error as CallbackError);
   }
 });
+
+userSchema.methods.comparePassword = async function (password: string) {
+  return await verifyPassword(password, this.password);
+};
 
 userSchema.methods.getRequiredFields = function () {
   return {
