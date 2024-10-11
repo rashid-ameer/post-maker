@@ -1,3 +1,4 @@
+import { ERROR_CODES } from "../constants/error-codes";
 import { HTTP_CODE } from "../constants/http-codes";
 import ApiError from "../lib/api-error";
 import { generateAccessToken, generateRefreshToken } from "../lib/jwt";
@@ -75,4 +76,30 @@ export const logoutUser = async (id: string) => {
 
   user.refreshToken = "";
   await user.save();
+};
+
+export const refreshAccessToken = async (id: string, refreshToken: string) => {
+  // check if the refresh token exist in database
+  const user = await UserModel.findById(id);
+  if (!user) {
+    throw new ApiError(HTTP_CODE.UNAUTHORIZED, "User not found");
+  }
+
+  if (user.refreshToken !== refreshToken) {
+    throw new ApiError(
+      HTTP_CODE.UNAUTHORIZED,
+      "Invalid or expired refresh token",
+      ERROR_CODES.INVALID_REFRESH_TOKEN
+    );
+  }
+
+  // generate new tokens
+  const newRefreshToken = await generateRefreshToken(user.id);
+  const accessToken = await generateAccessToken(user.id);
+
+  // store new refresh token in database
+  user.refreshToken = newRefreshToken;
+  await user.save();
+
+  return { newRefreshToken, accessToken };
 };

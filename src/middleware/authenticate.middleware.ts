@@ -10,7 +10,11 @@ const authenticate: RequestHandler = (req, res, next) => {
   const authToken = req.headers.authorization;
 
   if (!authToken) {
-    throw new ApiError(HTTP_CODE.UNAUTHORIZED, "Access token is missing");
+    throw new ApiError(
+      HTTP_CODE.UNAUTHORIZED,
+      "Access token is missing",
+      ERROR_CODES.MISSING_ACCESS_TOKEN
+    );
   }
 
   const accessToken = authToken.split(" ")[1];
