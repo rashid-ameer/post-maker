@@ -65,3 +65,14 @@ export const loginUser = async ({ email, password }: LoginUser) => {
 
   return { user: user.getRequiredFields(), accessToken, refreshToken };
 };
+
+export const logoutUser = async (id: string) => {
+  const user = await UserModel.findById(id);
+
+  if (!user) {
+    throw new ApiError(HTTP_CODE.NOT_FOUND, "User not found");
+  }
+
+  user.refreshToken = "";
+  await user.save();
+};

@@ -17,7 +17,7 @@ app.use(cookieParser());
 // defining the routes
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
-app.use("/posts", authenticate, postsRouter);
+app.use("/posts", postsRouter);
 
 //error handler middleware
 app.use(errorHandler);

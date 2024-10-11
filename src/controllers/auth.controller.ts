@@ -3,7 +3,7 @@ import { HTTP_CODE } from "../constants/http-codes";
 import ApiResponse from "../lib/api-response";
 import asyncHandler from "../lib/async-handler";
 import { loginUserSchema, registerUserSchema } from "../lib/schemas";
-import { loginUser, registerUser } from "../services/auth.services";
+import { loginUser, logoutUser, registerUser } from "../services/auth.services";
 import { NODE_ENV } from "../constants/env";
 
 export const registerHandler = asyncHandler(async (req, res) => {
@@ -39,4 +39,21 @@ export const loginHandler = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse("User logged in successfully", { user, accessToken })
     );
+});
+
+export const logoutHandler = asyncHandler(async (req, res) => {
+  const id = req.userId.toString();
+  // call a service
+  await logoutUser(id);
+
+  const cookieOptions: CookieOptions = {
+    httpOnly: true,
+    secure: NODE_ENV === "production",
+    sameSite: "none",
+  };
+  // return a response
+  res
+    .clearCookie("refreshCookie", cookieOptions)
+    .status(HTTP_CODE.NO_CONTENT)
+    .send();
 });

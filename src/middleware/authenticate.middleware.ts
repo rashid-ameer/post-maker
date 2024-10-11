@@ -7,12 +7,13 @@ import { ACCESS_TOKEN_SECRET } from "../constants/env";
 import { ERROR_CODES } from "../constants/error-codes";
 
 const authenticate: RequestHandler = (req, res, next) => {
-  const accessToken = req.headers.authorization?.split(" ")[1];
+  const authToken = req.headers.authorization;
 
-  if (!accessToken) {
-    throw new ApiError(HTTP_CODE.FORBIDDEN, "Access token is missing");
+  if (!authToken) {
+    throw new ApiError(HTTP_CODE.UNAUTHORIZED, "Access token is missing");
   }
 
+  const accessToken = authToken.split(" ")[1];
   const { error, payload } = verifyToken<AccessTokenPayload>(
     accessToken,
     ACCESS_TOKEN_SECRET
